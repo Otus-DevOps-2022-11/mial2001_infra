@@ -1,16 +1,18 @@
 # mial2001_infra
 mial2001 Infra repository
-# Исследовать способ подключения к someinternalhost в одну команду из вашего рабочего устройства
-ssh -i ~/.ssh/appuser -J appuser@51.250.2.165 appuser@10.128.0.4
-# для подключения по имени, нужно создать файл .ssh/config с содержимым:
-## bastion
-host bastion
-user appuser
-hostname 51.250.2.165
+bastion_IP = 51.250.2.165 
+someinternalhost_IP = 10.128.0.4 
+#файл .ssh/config для подключения по имени:
+#bastion
+Host bastion
+User appuser
+Hostname 51.250.2.165
 IdentityFile ~/.ssh/appuser
-
-## someinternalhost
-host someinternalhost
-user appuser
-hostname 10.128.0.4
-proxyjump bastion
+Host 10.128.0.*
+ProxyJump appuser@51.250.2.165
+#someinternalhost
+Host someinternalhost
+User appuser
+IdentityFile ~/.ssh/appuser
+Hostname 10.128.0.4
+ProxyJump appuser@51.250.2.165
